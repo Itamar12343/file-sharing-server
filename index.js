@@ -1,3 +1,5 @@
+const { Socket } = require("socket.io");
+
 const io = require("socket.io")(3000, {
     cors: {
         origin: "*"
@@ -5,5 +7,5 @@ const io = require("socket.io")(3000, {
 });
 
 io.on("connection", ws => {
-    ws.emit("h", "tre");
+
 });
