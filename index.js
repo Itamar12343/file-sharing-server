@@ -1,6 +1,7 @@
 const io = require("socket.io")(3000, {
     cors: {
-        origin: "*"
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"]
     }
 });
 
@@ -9,20 +10,27 @@ let isDualName = false;
 
 
 io.on("connection", socket => {
+    let myName;
+
 
     socket.on("receiverConnect", name => {
-        let myName;
+
 
         if (checkIfNameAlredyExist(name) == "true") {
             addNameToList(name);
             myName = name;
+            console.log(nameList);
         } else {
             console.log(false);
         }
     });
 
     socket.on("disconnect", () => {
-        console.log("hi");
+        if (myName != undefined) {
+            console.log(myName + " disconnected");
+            removeNameFromList(myName);
+            console.log(nameList);
+        }
     });
 
 });
