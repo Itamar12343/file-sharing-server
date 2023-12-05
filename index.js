@@ -21,7 +21,7 @@ io.on("connection", socket => {
             myName = name;
             console.log(nameList);
         } else {
-            console.log(false);
+            socket.emit("nameError");
         }
     });
 
