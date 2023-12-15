@@ -1,6 +1,6 @@
 const io = require("socket.io")(3000, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: ["http://localhost:5173", "https://file-sharing123.netlify.app"],
         methods: ["GET", "POST"]
     }
 });
@@ -15,14 +15,8 @@ io.on("connection", socket => {
 
     socket.on("receiverConnect", name => {
 
+        checkIfNameAlredyExist(name);
 
-        if (checkIfNameAlredyExist(name) == "true") {
-            addNameToList(name);
-            myName = name;
-            console.log(nameList);
-        } else {
-            socket.emit("nameError");
-        }
     });
 
     socket.on("disconnect", () => {
@@ -32,6 +26,29 @@ io.on("connection", socket => {
             console.log(nameList);
         }
     });
+
+
+
+
+    function checkIfNameAlredyExist(name) {
+        nameList.forEach(list => {
+            if (name == list) {
+                socket.emit("nameError");
+                console.log("name err");
+            } else {
+                addNameToList(name);
+                myName = name;
+                console.log(nameList);
+            }
+        });
+
+        if (nameList[0] == undefined) {
+            addNameToList(name);
+            myName = name;
+            console.log(nameList);
+
+        }
+    }
 
 });
 
@@ -52,19 +69,6 @@ function addNameToList(name) {
 
 }
 
-function checkIfNameAlredyExist(name) {
-    nameList.forEach(list => {
-        if (name != list) {
-            return "true";
-        } else {
-            return "false";
-        }
-    });
-
-    if (nameList[0] == undefined) {
-        return "true";
-    }
-}
 
 
 
